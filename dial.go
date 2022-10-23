@@ -1,3 +1,4 @@
+//go:build !js
 // +build !js
 
 package websocket
@@ -252,6 +253,11 @@ func verifyServerExtensions(copts *compressionOptions, h http.Header) (*compress
 			continue
 		case "server_no_context_takeover":
 			copts.serverNoContextTakeover = true
+			continue
+		}
+
+		if strings.HasPrefix(p, "server_max_window_bits") {
+			// We cannot adjust the read sliding window so cannot make use of this.
 			continue
 		}
 
